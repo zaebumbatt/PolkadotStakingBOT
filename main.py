@@ -1,6 +1,7 @@
 import os
 import time
 
+import telegram
 import requests
 from dotenv import load_dotenv
 
@@ -14,7 +15,7 @@ result = {}
 
 def get_api_answer():
     url = "https://polkadot.subscan.io/api/scan/events"
-    data = {"row": 100, "page": 0}
+    data = {"row": 20, "page": 0}
     answer = requests.post(url, json=data)
     answer = answer.json()["data"]["events"]
     value = 0
@@ -35,15 +36,8 @@ def get_api_answer():
 
 def send_message(link, event, value):
     message = event + ": " + value + " DOT\n" + link
-    url = (
-            "https://api.telegram.org/bot"
-            + TELEGRAM_TOKEN
-            + "/sendMessage?chat_id="
-            + CHAT_ID
-            + "&text="
-            + message
-    )
-    requests.post(url)
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
+    return bot.send_message(chat_id=CHAT_ID, text=message)
 
 
 if __name__ == "__main__":
