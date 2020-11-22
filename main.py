@@ -20,12 +20,14 @@ def get_api_answer():
     answer = answer.json()["data"]["events"]
     for i in answer:
         event = i["event_id"]
-        extrinsic = "https://polkadot.subscan.io/extrinsic/" + i["extrinsic_hash"]
-        if event in ["Bonded", "Unbonded", "Withdrawn"] and extrinsic not in result:
+        event_index = i["event_index"]
+        if event_index not in result and event in ["Bonded", "Unbonded", "Withdrawn"]:
+            extrinsic = "https://polkadot.subscan.io/extrinsic/" + i["extrinsic_hash"]
             for j in i["params"].split('"'):
                 if j.isnumeric():
                     value = str(round(float(j) / 10 ** 10, 2))
-            result.add(extrinsic)
+                    break
+            result.add(event_index)
             send_message(extrinsic, event, value)
 
 
