@@ -24,7 +24,7 @@ def get_api_answer():
         if event in ["Bonded", "Unbonded", "Withdrawn"]:
             extrinsic = "https://polkadot.subscan.io/extrinsic/" + i["extrinsic_hash"]
             if result.get(extrinsic):
-                continue
+                break
             else:
                 for j in i["params"].split('"'):
                     if j.isnumeric():
