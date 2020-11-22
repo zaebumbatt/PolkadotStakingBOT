@@ -10,28 +10,23 @@ load_dotenv()
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
-result = {}
+result = set()
 
 
 def get_api_answer():
     url = "https://polkadot.subscan.io/api/scan/events"
-    data = {"row": 20, "page": 0}
+    data = {"row": 100, "page": 0}
     answer = requests.post(url, json=data)
     answer = answer.json()["data"]["events"]
-    value = 0
-
     for i in answer:
         event = i["event_id"]
-        if event in ["Bonded", "Unbonded", "Withdrawn"]:
-            extrinsic = "https://polkadot.subscan.io/extrinsic/" + i["extrinsic_hash"]
-            if result.get(extrinsic):
-                break
-            else:
-                for j in i["params"].split('"'):
-                    if j.isnumeric():
-                        value = str(round(float(j) / 10 ** 10, 2))
-                result[extrinsic] = [event, value]
-                send_message(extrinsic, event, value)
+        extrinsic = "https://polkadot.subscan.io/extrinsic/" + i["extrinsic_hash"]
+        if event in ["Bonded", "Unbonded", "Withdrawn"] and extrinsic not in result:
+            for j in i["params"].split('"'):
+                if j.isnumeric():
+                    value = str(round(float(j) / 10 ** 10, 2))
+                    result.add(extrinsic)
+                    send_message(extrinsic, event, value)
 
 
 def send_message(link, event, value):
