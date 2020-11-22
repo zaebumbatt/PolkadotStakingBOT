@@ -25,8 +25,8 @@ def get_api_answer():
             for j in i["params"].split('"'):
                 if j.isnumeric():
                     value = str(round(float(j) / 10 ** 10, 2))
-                    result.add(extrinsic)
-                    send_message(extrinsic, event, value)
+            result.add(extrinsic)
+            send_message(extrinsic, event, value)
 
 
 def send_message(link, event, value):
