@@ -15,7 +15,7 @@ result = set()
 
 def get_api_answer():
     url = "https://polkadot.subscan.io/api/scan/events"
-    data = {"row": 100, "page": 0}
+    data = {"row": 20, "page": 0}
     answer = requests.post(url, json=data)
     answer = answer.json()["data"]["events"]
     for i in answer:
