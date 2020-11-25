@@ -32,7 +32,7 @@ def get_api_answer():
 
 
 def send_message(link, event, value):
-    if float(value) >= 1000:
+    if float(value) >= 10000:
         message = event + ": " + value + " DOT\n" + link
         bot = telegram.Bot(token=TELEGRAM_TOKEN)
         return bot.send_message(chat_id=CHAT_ID, text=message)
